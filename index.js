@@ -38,9 +38,33 @@ server.get('/', function (req, res, next) {
     //     res.send(dados);
     // });
 
-    knex.raw('call listarUsuarios()').then((dados)=>{ 
-      res.send(dados);
+    const consulta = 'select 	u.*, p.nomePerfil, m.nomeMateria, n.nomeNivel, d.nomeDisciplina, a.nomeArea,'+
+                          ' b.nomeBairro, c.nomeCidade, e.nomeEstado, dds.nomeDiasSemana,'+
+                          ' h.horarios, t.nomeTurno'+
+                          ' from Usuarios u'+
+                          ' join Perfil p on p.idPerfil = u.cdPerfil'+
+                          ' join MateriaTutor mt on mt.cdUsuario = u.idUsuarios'+
+                          ' join Materias m on m.idMaterias = mt.cdMateria'+
+                          ' join Nivel n on n.idNivel = m.cdNivel'+
+                          ' join Disciplinas d on d.idDisciplinas = m.cdDisciplina'+
+                          ' join Area a on a.idArea = d.cdArea'+
+                          ' join BairrosAtuacao ba on ba.cdUsuario = u.idUsuarios'+
+                          ' join Bairros b on b.idBairros = ba.cdbairro'+
+                          ' join Cidade c on c.idCidade = b.cdCidade'+
+                          ' join Estado e on e.idEstado = c.cdEstado'+
+                          ' join Agenda ag on ag.cdUsuario = u.idUsuarios'+
+                          ' join DiasDaSemana dds on dds.idDiasDaSemana = ag.cdDiaDaSemana'+
+                          ' join Horarios h on h.idHorarios = ag.cdHorario'+
+                          ' join Turno t on t.idTurno = h.cdTurno';
+
+    knex.raw(consulta + ' where ?? = ?', ['nomeDisciplina','Matematica']).then((dados)=>{ 
+        res.send(dados);
     });
+    
+
+    // knex.raw('call listarUsuarios()').then((dados)=>{ 
+    //   res.send(dados);
+    // });
 
     // knex.raw('call sp_v_estado(?,?)',['amazonas',1]).then((dados)=>{ 
     //     res.send(dados);
