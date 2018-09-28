@@ -23,7 +23,7 @@ server.listen(8080, function () {
   console.log('%s listening at %s', server.name, server.url);
 });
 
-server.get('/', function (req, res, next) {
+server.get('/show/:nomeDisciplina', function (req, res, next) {
     
     // knex('cidade').then((dados)=>{
         
@@ -37,6 +37,8 @@ server.get('/', function (req, res, next) {
     // knex.raw('select * from estado where ?? > ?', ['idEstado',0]).then((dados)=>{ 
     //     res.send(dados);
     // });
+
+    const { nomeDisciplina } = req.params;
 
     const consulta = 'select 	u.*, p.nomePerfil, m.nomeMateria, n.nomeNivel, d.nomeDisciplina, a.nomeArea,'+
                           ' b.nomeBairro, c.nomeCidade, e.nomeEstado, dds.nomeDiasSemana,'+
@@ -57,7 +59,7 @@ server.get('/', function (req, res, next) {
                           ' join Horarios h on h.idHorarios = ag.cdHorario'+
                           ' join Turno t on t.idTurno = h.cdTurno';
 
-    knex.raw(consulta + ' where ?? = ?', ['nomeDisciplina','Matematica']).then((dados)=>{ 
+    knex.raw(consulta + ' where ?? = ?', ['nomeDisciplina',nomeDisciplina]).then((dados)=>{ 
         res.send(dados);
     });
     
