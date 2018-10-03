@@ -60,7 +60,7 @@ server.get('/show/:nomeDisciplina', function (req, res, next) {
                           ' join Turno t on t.idTurno = h.cdTurno';
 
     knex.raw(consulta + ' where ?? = ?', ['nomeDisciplina',nomeDisciplina]).then((dados)=>{ 
-        res.send(dados);
+        res.send(dados[0]);
     });
     
 
@@ -85,5 +85,27 @@ server.get('/show/:nomeDisciplina', function (req, res, next) {
     //     });
     
     
+    return next();
+  });
+
+  server.get('/salvar/:nome/:email/:valorHoraAula/:cpf/:cdDisciplina/:cdBairro/:cdDiaDaSemana/:telefone/:cdHorarios',
+    function (req, res, next) {
+    
+    const { nome } = req.params;
+    const { email } = req.params;
+    const { valorHoraAula } = req.params;
+    const { cpf } = req.params;
+    const { cdDisciplina } = req.params;
+    const { cdBairro } = req.params;
+    const { cdDiaDaSemana } = req.params;
+    const { telefone } = req.params;
+    const { cdHorarios } = req.params;
+
+    knex.raw('call criarUsuario(?,?,?,?,?,?,?,?,?)',
+            [nome, email, valorHoraAula, cpf, cdDisciplina, cdBairro, cdDiaDaSemana, telefone, cdHorarios])
+    .then((dados)=>{ 
+        res.send(dados);
+    });
+
     return next();
   });
